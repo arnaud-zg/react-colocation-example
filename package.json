@@ -11,7 +11,7 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
-    "deploy": "bun run build && npx gh-pages -d dist -m 'deploy: update site'"
+    "deploy": "bun run build && npx gh-pages -d dist"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.14",

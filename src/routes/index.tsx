@@ -17,12 +17,10 @@ function App() {
         alt="React logo"
       />
       <h1 className="mb-6 text-4xl font-extrabold leading-tight text-center">
-        Code Colocation in React
+        Maintainable Frontend Architecture with React
       </h1>
       <p className="max-w-3xl mb-8 text-center leading-relaxed text-gray-300">
-        Organize your React code by colocating components, hooks, and styles
-        within feature folders. This approach keeps your frontend codebase
-        clean, maintainable, and scalable.
+        This demo showcases techniques for organizing React components by colocating related logic and data.
       </p>
       <a
         href="https://your-substack-link.substack.com/p/code-colocation-react"
