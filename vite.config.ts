@@ -3,10 +3,10 @@ import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
-// Bun-compatible path resolution
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/react-colocation-example/',
   plugins: [
     tanstackRouter({ autoCodeSplitting: true }),
     viteReact(),

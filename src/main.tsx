@@ -12,6 +12,7 @@ import reportWebVitals from './reportWebVitals.ts'
 const router = createRouter({
   routeTree,
   context: {},
+  basepath: '/react-colocation-example/',
   defaultPreload: 'intent',
   scrollRestoration: true,
   defaultStructuralSharing: true,
