@@ -27,6 +27,7 @@ import {
 import { type FC, type RefObject, useState } from "react";
 import type { Product } from "../../types/Product";
 import { WelcomeModal } from "../WelcomeModal/WelcomeModal";
+import { WelcomeModalLogic } from "../WelcomeModal/WelcomeModal.logic";
 import type { WelcomeModalHandle } from "../WelcomeModal/WelcomeModal.types";
 import { ProductCard } from "./ProductCard/ProductCard";
 import { ProductCardLogic } from "./ProductCard/ProductCard.logic";
@@ -77,7 +78,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
           size="default"
           onClick={() => welcomeModalHandle.current.open()}
         >
-          {WelcomeModal.selectSkillLabels(
+          {WelcomeModalLogic.selectSkillLabels(
             welcomeModalSurvey?.skill ?? "beginner"
           )}
         </Button>

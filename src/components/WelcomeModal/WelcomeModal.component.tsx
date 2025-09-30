@@ -1,10 +1,6 @@
 import { useForm } from "@tanstack/react-form";
-import { type Ref, useImperativeHandle, useMemo, useState } from "react";
+import { type Ref, useImperativeHandle, useState } from "react";
 
-import {
-  getWelcomeModalSurvey,
-  saveWelcomeSurvey,
-} from "./WelcomeModal.storage";
 import {
   type WelcomeModalHandle,
   type WelcomeModalProps,
@@ -20,6 +16,7 @@ import {
   ModalHeader,
   ModalTitle,
 } from "@/components/ui/modal";
+import { WelcomeModal } from "./WelcomeModal";
 import { WelcomeModalLogic } from "./WelcomeModal.logic";
 
 export const WelcomeModalComponent = (
@@ -27,9 +24,9 @@ export const WelcomeModalComponent = (
   ref: Ref<WelcomeModalHandle>
 ) => {
   const [isOpen, setIsOpen] = useState(false);
-  const initialWelcomeModalSurvey = useMemo(getWelcomeModalSurvey, []);
   const form = useForm({
-    defaultValues: initialWelcomeModalSurvey,
+    defaultValues:
+      WelcomeModal.WelcomeModalStorageLogic.getWelcomeModalSurvey(),
     onSubmit: async ({ value }) => {
       if (!value) return;
 
@@ -42,7 +39,7 @@ export const WelcomeModalComponent = (
       };
 
       onAction?.(nextValue);
-      saveWelcomeSurvey(nextValue);
+      WelcomeModal.WelcomeModalStorageLogic.saveWelcomeSurvey(nextValue);
       setIsOpen(false);
     },
   });
