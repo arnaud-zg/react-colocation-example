@@ -20,7 +20,7 @@ import {
   ModalHeader,
   ModalTitle,
 } from "@/components/ui/modal";
-import { selectSkillLabels } from "./WelcomeModal.logic";
+import { WelcomeModalLogic } from "./WelcomeModal.logic";
 
 export const WelcomeModalComponent = (
   { title, description, actionLabel = "Continue", onAction }: WelcomeModalProps,
@@ -105,13 +105,13 @@ export const WelcomeModalComponent = (
                   >
                     <option value="">-- Select knowledge level --</option>
                     <option value="beginner">
-                      {selectSkillLabels("beginner")}
+                      {WelcomeModalLogic.selectSkillLabels("beginner")}
                     </option>
                     <option value="intermediate">
-                      {selectSkillLabels("intermediate")}
+                      {WelcomeModalLogic.selectSkillLabels("intermediate")}
                     </option>
                     <option value="expert">
-                      {selectSkillLabels("expert")}
+                      {WelcomeModalLogic.selectSkillLabels("expert")}
                     </option>
                   </select>
                   {field.state.meta.isTouched &&

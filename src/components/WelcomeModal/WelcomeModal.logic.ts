@@ -22,20 +22,20 @@ export const useWelcomeModalHandle = () => {
   return { ref };
 };
 
-export const selectSkillLabels = (
-  skill: WelcomeModalSurvey["skill"]
-): string => {
-  switch (skill) {
-    case "beginner":
-      return "✨ Beginner Explorer";
-    case "intermediate":
-      return "🧙‍♂️ Adept Seeker";
-    case "expert":
-      return "🌌 Master Mystic";
+export class WelcomeModalLogic {
+  static selectSkillLabels = (skill: WelcomeModalSurvey["skill"]): string => {
+    switch (skill) {
+      case "beginner":
+        return "✨ Beginner Explorer";
+      case "intermediate":
+        return "🧙‍♂️ Adept Seeker";
+      case "expert":
+        return "🌌 Master Mystic";
 
-    default:
-      throw new Error(
-        `selectSkillLabels: Unknown skill "${skill}". Expected "beginner", "intermediate", or "expert".`
-      );
-  }
-};
+      default:
+        throw new Error(
+          `selectSkillLabels: Unknown skill "${skill}". Expected "beginner", "intermediate", or "expert".`
+        );
+    }
+  };
+}
