@@ -37,7 +37,6 @@ export const useWelcomeModalSurvey = () => {
 
   useEffect(() => {
     const handlerWelcomeModalSurveyChange = () => {
-      console.log("HERE");
       setWelcomeModalSurvey(getWelcomeModalSurvey());
     };
 
