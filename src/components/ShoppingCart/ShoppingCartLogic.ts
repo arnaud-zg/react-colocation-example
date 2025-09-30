@@ -25,16 +25,16 @@ export class ShoppingCartLogic {
       return cart.map((item, index) => {
         if (
           index === existingItemIndex &&
-          item.quantity < this.MAX_ITEM_QUANTITY
+          item.quantity < ShoppingCartLogic.MAX_ITEM_QUANTITY
         ) {
           return { ...item, quantity: item.quantity + 1 };
         }
         return item;
       });
-    } else {
-      // New item
-      return [...cart, { ...product, quantity: 1 }];
     }
+
+    // New item
+    return [...cart, { ...product, quantity: 1 }];
   }
 
   /**
@@ -49,15 +49,15 @@ export class ShoppingCartLogic {
       if (item.quantity === 1) {
         // Remove item entirely if quantity becomes 0
         return cart.filter((item) => item.id !== productId);
-      } else {
-        // Decrease quantity
-        return cart.map((item, index) => {
-          if (index === existingItemIndex) {
-            return { ...item, quantity: item.quantity - 1 };
-          }
-          return item;
-        });
       }
+
+      // Decrease quantity
+      return cart.map((item, index) => {
+        if (index === existingItemIndex) {
+          return { ...item, quantity: item.quantity - 1 };
+        }
+        return item;
+      });
     }
 
     return cart;
@@ -73,8 +73,8 @@ export class ShoppingCartLogic {
   ): CartItem[] {
     // Validate quantity within bounds
     const validQuantity = Math.max(
-      this.MIN_ITEM_QUANTITY,
-      Math.min(quantity, this.MAX_ITEM_QUANTITY)
+      ShoppingCartLogic.MIN_ITEM_QUANTITY,
+      Math.min(quantity, ShoppingCartLogic.MAX_ITEM_QUANTITY)
     );
 
     return cart.map((item) => {
@@ -96,14 +96,16 @@ export class ShoppingCartLogic {
    * Calculate shipping cost based on subtotal
    */
   static calculateShipping(subtotal: number): number {
-    return subtotal >= this.SHIPPING_THRESHOLD ? 0 : this.SHIPPING_COST;
+    return subtotal >= ShoppingCartLogic.SHIPPING_THRESHOLD
+      ? 0
+      : ShoppingCartLogic.SHIPPING_COST;
   }
 
   /**
    * Calculate tax amount
    */
   static calculateTax(subtotal: number): number {
-    return subtotal * this.TAX_RATE;
+    return subtotal * ShoppingCartLogic.TAX_RATE;
   }
 
   /**
@@ -130,10 +132,10 @@ export class ShoppingCartLogic {
   }
 
   static convertCopper(copper: number) {
-    copper = Math.round(copper); // ensures integer input
+    const safeCopper = Math.round(copper);
 
-    const gold = Math.floor(copper / 10000);
-    const remainderAfterGold = copper - gold * 10000;
+    const gold = Math.floor(safeCopper / 10000);
+    const remainderAfterGold = safeCopper - gold * 10000;
 
     const silver = Math.floor(remainderAfterGold / 100);
     const remainingCopper = remainderAfterGold - silver * 100;
@@ -150,7 +152,7 @@ export class ShoppingCartLogic {
   static getFormattedPrices(amount: number): string {
     const { gold, silver, copper } = ShoppingCartLogic.convertCopper(amount);
 
-    let formattedPrices = [];
+    const formattedPrices = [];
 
     if (gold > 0) {
       formattedPrices.push(`${gold} 🟡`);
