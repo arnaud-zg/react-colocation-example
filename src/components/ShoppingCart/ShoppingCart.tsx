@@ -28,10 +28,10 @@ import { type FC, type RefObject, useState } from "react";
 import type { Product } from "../../types/Product";
 import { WelcomeModal } from "../WelcomeModal/WelcomeModal";
 import type { WelcomeModalHandle } from "../WelcomeModal/WelcomeModal.types";
-import { CartItem } from "./CartItem";
-import { ProductCard } from "./ProductCard";
-import { ProductCardLogic } from "./ProductCard.logic";
+import { ProductCard } from "./ProductCard/ProductCard";
+import { ProductCardLogic } from "./ProductCard/ProductCard.logic";
 import { PRODUCTS } from "./ShoppingCart.config";
+import { ShoppingCartItem } from "./ShoppingCartItem";
 import type { CartItem as CartItemType } from "./ShoppingCartLogic";
 import { ShoppingCartLogic } from "./ShoppingCartLogic";
 
@@ -187,7 +187,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                         }}
                       >
                         {cart.map((item) => (
-                          <CartItem
+                          <ShoppingCartItem
                             key={item.id}
                             item={item}
                             onIncreaseQuantity={() => handleAddToCart(item)}

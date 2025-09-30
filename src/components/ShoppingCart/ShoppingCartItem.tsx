@@ -6,19 +6,19 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import type { CartItem as CartItemType } from "./ShoppingCartLogic";
 import { ShoppingCartLogic } from "./ShoppingCartLogic";
 
-interface CartItemProps {
+interface ShoppingCartItemProps {
   item: CartItemType;
   onIncreaseQuantity: (productId: string) => void;
   onDecreaseQuantity: (productId: string) => void;
   onRemoveItem: (productId: string) => void;
 }
 
-export function CartItem({
+export function ShoppingCartItem({
   item,
   onIncreaseQuantity,
   onDecreaseQuantity,
   onRemoveItem,
-}: CartItemProps) {
+}: ShoppingCartItemProps) {
   return (
     <motion.div
       layout
@@ -32,7 +32,7 @@ export function CartItem({
       }}
       transition={{
         type: "tween",
-        ease: [0.4, 0.0, 0.2, 1], // Elegant ease-in-out
+        ease: [0.4, 0.0, 0.2, 1],
         opacity: { duration: 0.3 },
         height: { duration: 0.5 },
         layout: { duration: 0.5 },
