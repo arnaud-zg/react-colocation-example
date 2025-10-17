@@ -1,10 +1,11 @@
+import { Money } from "@/types/Money";
 import type { Product } from "../../types/Product";
 
 export const PRODUCTS: Product[] = [
   {
     id: "thunderfury",
     name: "Thunderfury, Blessed Blade of the Windseeker",
-    price: 485,
+    price: new Money(485),
     imageUrl:
       "https://static.wikia.nocookie.net/wowpedia/images/c/c9/Thunderfury%2C_Blessed_Blade_of_the_Windseeker.JPG",
     knowledge: {
@@ -55,7 +56,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "ashbringer",
     name: "Ashbringer",
-    price: 750,
+    price: new Money(750),
     imageUrl:
       "https://static.wikia.nocookie.net/wowpedia/images/a/a6/Ashbringer_TCG.jpg",
     knowledge: {
@@ -98,7 +99,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "sulfuras",
     name: "Sulfuras, Hand of Ragnaros",
-    price: 900,
+    price: new Money(900),
     imageUrl:
       "https://static.wikia.nocookie.net/wowpedia/images/6/6e/Sulfuras_Hand_of_Ragnaros_TCG.jpg",
     knowledge: {
@@ -144,7 +145,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "valanyr",
     name: "Val'anyr, Hammer of Ancient Kings",
-    price: 650,
+    price: new Money(650),
     imageUrl:
       "https://static.wikia.nocookie.net/wowpedia/images/7/76/Val%27anyr%2C_Hammer_of_Ancient_Kings_TCG.jpg",
     knowledge: {
@@ -189,7 +190,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "doomhammer",
     name: "Doomhammer",
-    price: 680,
+    price: new Money(680),
     imageUrl:
       "https://static.wikia.nocookie.net/wowpedia/images/a/a2/Doomhammer_TCG.jpg",
     knowledge: {

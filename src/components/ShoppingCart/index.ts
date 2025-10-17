@@ -1,3 +1,2 @@
-export { ShoppingCart } from './ShoppingCart';
-export { ShoppingCartLogic } from './ShoppingCartLogic';
-export type { CartItem } from './ShoppingCartLogic';
+export { ShoppingCart } from "./ShoppingCart";
+export { ShoppingCartLogic } from "./ShoppingCartLogic";

@@ -1,7 +1,9 @@
+import type { Money } from "./Money";
+
 export interface Product {
   id: string;
   name: string;
-  price: number;
+  price: Money;
   imageUrl: string;
   knowledge: KnowledgeContent;
 }

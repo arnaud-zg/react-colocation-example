@@ -29,14 +29,14 @@ function App() {
       </p>
 
       <div className="flex flex-col gap-2">
-        <a
+        {/* <a
           href="https://your-substack-link.substack.com/p/code-colocation-react"
           target="_blank"
           rel="noopener noreferrer"
           className="text-[#61dafb] hover:underline font-semibold transition-colors duration-200"
         >
           🔗 Read my article about code colocation
-        </a>
+        </a> */}
         <a
           href="https://github.com/arnaud-zg/react-colocation-example"
           target="_blank"

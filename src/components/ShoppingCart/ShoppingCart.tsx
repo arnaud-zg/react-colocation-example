@@ -24,6 +24,7 @@ import {
   ModalTitle,
   ModalTrigger,
 } from "@/components/ui/modal";
+import { Money } from "@/types/Money";
 import { type FC, type RefObject, useState } from "react";
 import type { Product } from "../../types/Product";
 import { WelcomeModal } from "../WelcomeModal/WelcomeModal";
@@ -33,15 +34,15 @@ import { ProductCard } from "./ProductCard/ProductCard";
 import { ProductCardLogic } from "./ProductCard/ProductCard.logic";
 import { PRODUCTS } from "./ShoppingCart.config";
 import { ShoppingCartItem } from "./ShoppingCartItem";
-import type { CartItem as CartItemType } from "./ShoppingCartLogic";
 import { ShoppingCartLogic } from "./ShoppingCartLogic";
+import type { CartItem } from "./logic/CartItem";
 
 interface ShoppingCartProps {
   welcomeModalHandle: RefObject<WelcomeModalHandle>;
 }
 
 export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
-  const [cart, setCart] = useState<CartItemType[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
   const { welcomeModalSurvey } = WelcomeModal.useWelcomeModalSurvey();
 
@@ -104,7 +105,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
               variant="outline"
             >
               <ShoppingCartIcon className="h-4 w-4 mr-2" />
-              Cart <Badge className="ml-2">{totalItems}</Badge>
+              Cart <Badge className="ml-2">{totalItems.value}</Badge>
             </Button>
           </div>
 
@@ -133,7 +134,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                 </h2>
                 <div className="flex justify-center">
                   <Badge variant="outline" className="font-normal">
-                    {totalItems} items
+                    {totalItems.value} items
                   </Badge>
                   <Button
                     variant="ghost"
@@ -191,7 +192,9 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           <ShoppingCartItem
                             key={item.id}
                             item={item}
-                            onIncreaseQuantity={() => handleAddToCart(item)}
+                            onIncreaseQuantity={() =>
+                              handleAddToCart(item.product)
+                            }
                             onDecreaseQuantity={() =>
                               handleRemoveFromCart(item.id)
                             }
@@ -227,7 +230,6 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                       <div className="relative h-6 flex items-center justify-end min-w-[80px] whitespace-nowrap">
                         <motion.span
                           className="font-medium absolute right-0 text-sm"
-                          key={subtotal}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{
@@ -251,7 +253,6 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                       <div className="relative h-6 flex items-center justify-end min-w-[80px]">
                         <motion.span
                           className="absolute right-0 flex items-center"
-                          key={shipping}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{
@@ -259,7 +260,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             ease: [0.4, 0.0, 0.2, 1],
                           }}
                         >
-                          {shipping === 0 ? (
+                          {shipping.amount === 0 ? (
                             <Badge
                               variant="outline"
                               className="text-green-600 bg-green-50 text-xs py-0 h-5"
@@ -286,7 +287,6 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                       <div className="relative h-6 flex items-center justify-end min-w-[80px] whitespace-nowrap">
                         <motion.span
                           className="font-medium absolute right-0 text-sm"
-                          key={tax}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{
@@ -311,7 +311,6 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                     <div className="flex-1 relative h-6 flex items-center justify-end">
                       <motion.span
                         className="font-bold absolute right-0"
-                        key={total}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{
@@ -325,7 +324,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                   </motion.div>
 
                   <AnimatePresence>
-                    {subtotal < ShoppingCartLogic.SHIPPING_THRESHOLD && (
+                    {subtotal.amount < ShoppingCartLogic.SHIPPING_THRESHOLD && (
                       <motion.div
                         className="bg-gray-50 border border-gray-200 rounded-md p-2 text-xs text-gray-700 mt-3"
                         initial={{
@@ -356,14 +355,15 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                         layout
                       >
                         <motion.span
-                          key={ShoppingCartLogic.SHIPPING_THRESHOLD - subtotal}
                           initial={{ opacity: 0.8 }}
                           animate={{ opacity: 1 }}
                           transition={{ duration: 0.3 }}
                         >
                           Add{" "}
                           {ShoppingCartLogic.getFormattedPrices(
-                            ShoppingCartLogic.SHIPPING_THRESHOLD - subtotal
+                            new Money(
+                              ShoppingCartLogic.SHIPPING_THRESHOLD
+                            ).subtract(subtotal)
                           )}{" "}
                           more to earn free delivery by griffin!
                         </motion.span>

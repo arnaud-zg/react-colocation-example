@@ -3,11 +3,11 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import type { CartItem as CartItemType } from "./ShoppingCartLogic";
 import { ShoppingCartLogic } from "./ShoppingCartLogic";
+import { CartItem } from "./logic/CartItem";
 
 interface ShoppingCartItemProps {
-  item: CartItemType;
+  item: CartItem;
   onIncreaseQuantity: (productId: string) => void;
   onDecreaseQuantity: (productId: string) => void;
   onRemoveItem: (productId: string) => void;
@@ -61,9 +61,7 @@ export function ShoppingCartItem({
           <div className="flex flex-col items-end gap-2">
             <div className="flex items-center">
               <div className="text-right font-medium mr-2 whitespace-nowrap">
-                {ShoppingCartLogic.getFormattedPrices(
-                  item.price * item.quantity
-                )}
+                {ShoppingCartLogic.getFormattedPrices(item.totalPrice())}
               </div>
               <Button
                 onClick={() => onRemoveItem(item.id)}
@@ -90,7 +88,7 @@ export function ShoppingCartItem({
               <Separator orientation="vertical" />
 
               <span className="px-3 py-0.5 text-center min-w-[30px] text-sm">
-                {item.quantity}
+                {item.quantity.value}
               </span>
 
               <Separator orientation="vertical" />
@@ -101,7 +99,7 @@ export function ShoppingCartItem({
                 size="icon"
                 className="h-7 w-7 rounded-l-none p-0"
                 aria-label="Increase quantity"
-                disabled={item.quantity >= ShoppingCartLogic.MAX_ITEM_QUANTITY}
+                disabled={item.quantity.value >= CartItem.MAX_QUANTITY}
               >
                 <Plus className="h-3 w-3" />
               </Button>
