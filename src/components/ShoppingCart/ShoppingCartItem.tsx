@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { ShoppingCartLogic } from "./ShoppingCartLogic";
+import { goldSilverCopperFormatter } from "./GoldSilverCopperFormatter";
 import { CartItem } from "./logic/CartItem";
 
 interface ShoppingCartItemProps {
@@ -52,7 +52,7 @@ export function ShoppingCartItem({
               <h4 className="font-medium text-gray-900">{item.name}</h4>
               <div className="mt-0.5 flex items-center">
                 <span className="text-xs text-gray-500">
-                  {ShoppingCartLogic.getFormattedPrices(item.price)} each
+                  {goldSilverCopperFormatter.format(item.price)} each
                 </span>
               </div>
             </div>
@@ -61,7 +61,7 @@ export function ShoppingCartItem({
           <div className="flex flex-col items-end gap-2">
             <div className="flex items-center">
               <div className="text-right font-medium mr-2 whitespace-nowrap">
-                {ShoppingCartLogic.getFormattedPrices(item.totalPrice())}
+                {goldSilverCopperFormatter.format(item.totalPrice())}
               </div>
               <Button
                 onClick={() => onRemoveItem(item.id)}
