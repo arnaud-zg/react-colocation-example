@@ -1,16 +1,13 @@
 import { Money } from "@/types/Money";
 import { Quantity } from "@/types/Quantity";
 import type { Product } from "../../types/Product";
+import { ShippingPolicy } from "./ShippingPolicy";
+import { TaxPolicy } from "./TaxPolicy";
 import { CartItem } from "./logic/CartItem";
 
 // Colocated business logic using static methods
 export class ShoppingCartLogic {
   private items: CartItem[] = [];
-
-  // Business rules as static properties
-  static SHIPPING_THRESHOLD = new Money(50);
-  static SHIPPING_COST = new Money(5.99);
-  static TAX_RATE = 0.07; // 7%
 
   constructor(items: CartItem[] = []) {
     this.items = items;
@@ -24,14 +21,11 @@ export class ShoppingCartLogic {
   }
 
   get shipping(): Money {
-    if (this.subtotal.amount >= ShoppingCartLogic.SHIPPING_THRESHOLD.amount) {
-      return new Money(0);
-    }
-    return ShoppingCartLogic.SHIPPING_COST;
+    return ShippingPolicy.calculate(this.subtotal);
   }
 
   get tax(): Money {
-    return this.subtotal.multiply(ShoppingCartLogic.TAX_RATE);
+    return TaxPolicy.calculate(this.subtotal);
   }
 
   get total(): Money {

@@ -33,6 +33,7 @@ import type { WelcomeModalHandle } from "../WelcomeModal/WelcomeModal.types";
 import { goldSilverCopperFormatter } from "./GoldSilverCopperFormatter";
 import { ProductCard } from "./ProductCard/ProductCard";
 import { ProductCardLogic } from "./ProductCard/ProductCard.logic";
+import { ShippingPolicy } from "./ShippingPolicy";
 import { PRODUCTS } from "./ShoppingCart.config";
 import { ShoppingCartItem } from "./ShoppingCartItem";
 import { ShoppingCartLogic } from "./ShoppingCartLogic";
@@ -313,7 +314,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
 
                   <AnimatePresence>
                     {subtotal.amount <
-                      ShoppingCartLogic.SHIPPING_THRESHOLD.amount && (
+                      ShippingPolicy.SHIPPING_THRESHOLD.amount && (
                       <motion.div
                         className="bg-gray-50 border border-gray-200 rounded-md p-2 text-xs text-gray-700 mt-3"
                         initial={{
@@ -351,7 +352,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           Add{" "}
                           {goldSilverCopperFormatter.format(
                             new Money(
-                              ShoppingCartLogic.SHIPPING_THRESHOLD.amount
+                              ShippingPolicy.SHIPPING_THRESHOLD.amount
                             ).subtract(subtotal)
                           )}{" "}
                           more to earn free delivery by griffin!
