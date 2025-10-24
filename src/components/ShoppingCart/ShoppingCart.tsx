@@ -30,40 +30,32 @@ import type { Product } from "../../types/Product";
 import { WelcomeModal } from "../WelcomeModal/WelcomeModal";
 import { WelcomeModalLogic } from "../WelcomeModal/WelcomeModal.logic";
 import type { WelcomeModalHandle } from "../WelcomeModal/WelcomeModal.types";
+import { goldSilverCopperFormatter } from "./GoldSilverCopperFormatter";
 import { ProductCard } from "./ProductCard/ProductCard";
 import { ProductCardLogic } from "./ProductCard/ProductCard.logic";
 import { PRODUCTS } from "./ShoppingCart.config";
 import { ShoppingCartItem } from "./ShoppingCartItem";
 import { ShoppingCartLogic } from "./ShoppingCartLogic";
-import type { CartItem } from "./logic/CartItem";
+import { useCart } from "./useCart";
 
 interface ShoppingCartProps {
   welcomeModalHandle: RefObject<WelcomeModalHandle>;
 }
 
 export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const { addItem, cart, removeItem } = useCart();
+
   const [showCart, setShowCart] = useState(false);
   const { welcomeModalSurvey } = WelcomeModal.useWelcomeModalSurvey();
 
-  // Add to cart handler
-  const handleAddToCart = (product: Product) => {
-    setCart((prevCart) => ShoppingCartLogic.addItemToCart(prevCart, product));
-  };
+  const handleAddToCart = (product: Product) => addItem(product);
+  const handleRemoveFromCart = (productId: string) => removeItem(productId);
 
-  // Remove from cart handler
-  const handleRemoveFromCart = (productId: string) => {
-    setCart((prevCart) =>
-      ShoppingCartLogic.removeItemFromCart(prevCart, productId)
-    );
-  };
+  // Remove item from cart is not working
 
-  // Calculate order summary
-  const { subtotal, shipping, tax, total } =
-    ShoppingCartLogic.calculateTotal(cart);
+  const { subtotal, shipping, tax, total } = cart;
 
-  // Total items count for cart badge
-  const totalItems = ShoppingCartLogic.getTotalItems(cart);
+  const totalItems = cart.totalItems;
 
   const selectedProfile = ProductCardLogic.selectProfile(
     welcomeModalSurvey?.skill ?? "beginner"
@@ -149,7 +141,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
             </CardHeader>
 
             <CardContent className="pt-4 px-4">
-              {ShoppingCartLogic.isCartEmpty(cart) ? (
+              {cart.isEmpty ? (
                 <motion.div
                   className="text-center py-12"
                   initial={{ opacity: 0 }}
@@ -188,7 +180,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           height: { duration: 0.5, ease: [0.4, 0.0, 0.2, 1] },
                         }}
                       >
-                        {cart.map((item) => (
+                        {cart.allItems.map((item) => (
                           <ShoppingCartItem
                             key={item.id}
                             item={item}
@@ -198,11 +190,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             onDecreaseQuantity={() =>
                               handleRemoveFromCart(item.id)
                             }
-                            onRemoveItem={(id) =>
-                              setCart((prevCart) =>
-                                prevCart.filter((item) => item.id !== id)
-                              )
-                            }
+                            onRemoveItem={handleRemoveFromCart}
                           />
                         ))}
                       </motion.div>
@@ -237,7 +225,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             ease: [0.4, 0.0, 0.2, 1],
                           }}
                         >
-                          {ShoppingCartLogic.getFormattedPrices(subtotal)}
+                          {goldSilverCopperFormatter.format(subtotal)}
                         </motion.span>
                       </div>
                     </motion.div>
@@ -269,7 +257,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             </Badge>
                           ) : (
                             <span className="font-medium text-sm whitespace-nowrap">
-                              {ShoppingCartLogic.getFormattedPrices(shipping)}
+                              {goldSilverCopperFormatter.format(shipping)}
                             </span>
                           )}
                         </motion.span>
@@ -294,7 +282,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             ease: [0.4, 0.0, 0.2, 1],
                           }}
                         >
-                          {ShoppingCartLogic.getFormattedPrices(tax)}
+                          {goldSilverCopperFormatter.format(tax)}
                         </motion.span>
                       </div>
                     </motion.div>
@@ -318,13 +306,14 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           ease: [0.4, 0.0, 0.2, 1],
                         }}
                       >
-                        {ShoppingCartLogic.getFormattedPrices(total)}
+                        {goldSilverCopperFormatter.format(total)}
                       </motion.span>
                     </div>
                   </motion.div>
 
                   <AnimatePresence>
-                    {subtotal.amount < ShoppingCartLogic.SHIPPING_THRESHOLD && (
+                    {subtotal.amount <
+                      ShoppingCartLogic.SHIPPING_THRESHOLD.amount && (
                       <motion.div
                         className="bg-gray-50 border border-gray-200 rounded-md p-2 text-xs text-gray-700 mt-3"
                         initial={{
@@ -360,9 +349,9 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           transition={{ duration: 0.3 }}
                         >
                           Add{" "}
-                          {ShoppingCartLogic.getFormattedPrices(
+                          {goldSilverCopperFormatter.format(
                             new Money(
-                              ShoppingCartLogic.SHIPPING_THRESHOLD
+                              ShoppingCartLogic.SHIPPING_THRESHOLD.amount
                             ).subtract(subtotal)
                           )}{" "}
                           more to earn free delivery by griffin!
@@ -378,7 +367,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
               <Modal>
                 <ModalTrigger className="flex-1" asChild>
                   <Button
-                    disabled={ShoppingCartLogic.isCartEmpty(cart)}
+                    disabled={cart.isEmpty}
                     className="w-full"
                     size="default"
                   >
