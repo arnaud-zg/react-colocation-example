@@ -35,10 +35,10 @@ function App() {
           rel="noopener noreferrer"
           className="text-[#61dafb] hover:underline font-semibold transition-colors duration-200"
         >
-          🔗 Read my article about code colocation
+          🔗 Read my article about applying object calisthenics to user interface code
         </a> */}
         <a
-          href="https://github.com/arnaud-zg/react-colocation-example"
+          href="https://github.com/arnaud-zg/react-object-calisthenics"
           target="_blank"
           rel="noopener noreferrer"
           className="text-[#61dafb] hover:underline font-semibold transition-colors duration-200"

@@ -1,12 +1,12 @@
-import { defineConfig } from 'vite'
-import viteReact from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from "vite";
+import viteReact from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
-import { tanstackRouter } from '@tanstack/router-plugin/vite'
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/react-colocation-example/',
+  base: "/react-object-calisthenics/",
   plugins: [
     tanstackRouter({ autoCodeSplitting: true }),
     viteReact(),
@@ -14,7 +14,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': new URL('./src', import.meta.url).pathname,
+      "@": new URL("./src", import.meta.url).pathname,
     },
   },
-})
+});
