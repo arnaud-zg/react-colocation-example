@@ -81,6 +81,7 @@ export function ShoppingCartItem({
                 size="icon"
                 className="h-7 w-7 rounded-r-none p-0"
                 aria-label="Decrease quantity"
+                disabled={item.quantity.value <= 1}
               >
                 <Minus className="h-3 w-3" />
               </Button>
