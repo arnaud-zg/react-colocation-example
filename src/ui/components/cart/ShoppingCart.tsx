@@ -1,13 +1,3 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-
-import { Separator } from "@/components/ui/separator";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Github,
@@ -16,6 +6,23 @@ import {
   X,
 } from "lucide-react";
 
+import { PRODUCTS } from "@/data/products";
+import { ShippingPolicy } from "@/domain/cart/policy/ShippingPolicy";
+import { Money } from "@/domain/cart/value-objects/Money";
+import { goldSilverCopperFormatter } from "@/domain/currency/GoldSilverCopperFormatter";
+import { ShoppingCartItem } from "@/ui/components/Cart/ShoppingCartItem";
+import { useCart } from "@/ui/components/Cart/useCart";
+import { WelcomeModal } from "@/ui/components/WelcomeModal/WelcomeModal";
+import { WelcomeModalLogic } from "@/ui/components/WelcomeModal/WelcomeModal.logic";
+import type { WelcomeModalHandle } from "@/ui/components/WelcomeModal/WelcomeModal.types";
+import { Badge } from "@/ui/primitives/badge";
+import { Button } from "@/ui/primitives/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/ui/primitives/card";
 import {
   Modal,
   ModalContent,
@@ -23,41 +30,23 @@ import {
   ModalHeader,
   ModalTitle,
   ModalTrigger,
-} from "@/components/ui/modal";
-import { Money } from "@/types/Money";
+} from "@/ui/primitives/modal";
+import { Separator } from "@/ui/primitives/separator";
 import { type FC, type RefObject, useState } from "react";
-import type { Product } from "../../types/Product";
-import { WelcomeModal } from "../WelcomeModal/WelcomeModal";
-import { WelcomeModalLogic } from "../WelcomeModal/WelcomeModal.logic";
-import type { WelcomeModalHandle } from "../WelcomeModal/WelcomeModal.types";
-import { goldSilverCopperFormatter } from "./GoldSilverCopperFormatter";
 import { ProductCard } from "./ProductCard/ProductCard";
 import { ProductCardLogic } from "./ProductCard/ProductCard.logic";
-import { ShippingPolicy } from "./ShippingPolicy";
-import { PRODUCTS } from "./ShoppingCart.config";
-import { ShoppingCartItem } from "./ShoppingCartItem";
-import { ShoppingCartLogic } from "./ShoppingCartLogic";
-import { useCart } from "./useCart";
 
 interface ShoppingCartProps {
   welcomeModalHandle: RefObject<WelcomeModalHandle>;
 }
 
 export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
-  const { addItem, cart, removeItem } = useCart();
-
   const [showCart, setShowCart] = useState(false);
+  const { addItem, cart, decrementItem, deleteItem } = useCart();
   const { welcomeModalSurvey } = WelcomeModal.useWelcomeModalSurvey();
 
-  const handleAddToCart = (product: Product) => addItem(product);
-  const handleRemoveFromCart = (productId: string) => removeItem(productId);
-
-  // Remove item from cart is not working
-
   const { subtotal, shipping, tax, total } = cart;
-
   const totalItems = cart.totalItems;
-
   const selectedProfile = ProductCardLogic.selectProfile(
     welcomeModalSurvey?.skill ?? "beginner"
   );
@@ -107,7 +96,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
               <ProductCard
                 key={product.id}
                 product={product}
-                onAddToCart={handleAddToCart}
+                onAddToCart={addItem}
                 profile={selectedProfile}
               />
             ))}
@@ -185,13 +174,11 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           <ShoppingCartItem
                             key={item.id}
                             item={item}
-                            onIncreaseQuantity={() =>
-                              handleAddToCart(item.product)
-                            }
+                            onIncreaseQuantity={() => addItem(item.product)}
                             onDecreaseQuantity={() =>
-                              handleRemoveFromCart(item.id)
+                              decrementItem(item.product)
                             }
-                            onRemoveItem={handleRemoveFromCart}
+                            onRemoveItem={() => deleteItem(item.product)}
                           />
                         ))}
                       </motion.div>

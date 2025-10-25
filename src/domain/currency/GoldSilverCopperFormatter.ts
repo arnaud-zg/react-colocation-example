@@ -1,4 +1,4 @@
-import type { Money } from "@/types/Money";
+import type { Money } from "@/domain/cart/value-objects/Money";
 
 /**
  * Converts copper-based Money values into Azeroth-style currency

@@ -1,16 +1,16 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { CartItem } from "@/domain/cart/CartItem";
+import { goldSilverCopperFormatter } from "@/domain/currency/GoldSilverCopperFormatter";
+import { Button } from "@/ui/primitives/button";
+import { Card } from "@/ui/primitives/card";
+import { Separator } from "@/ui/primitives/separator";
 import { motion } from "framer-motion";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { goldSilverCopperFormatter } from "./GoldSilverCopperFormatter";
-import { CartItem } from "./logic/CartItem";
 
 interface ShoppingCartItemProps {
   item: CartItem;
-  onIncreaseQuantity: (productId: string) => void;
-  onDecreaseQuantity: (productId: string) => void;
-  onRemoveItem: (productId: string) => void;
+  onIncreaseQuantity: VoidFunction;
+  onDecreaseQuantity: VoidFunction;
+  onRemoveItem: VoidFunction;
 }
 
 export function ShoppingCartItem({
@@ -64,7 +64,7 @@ export function ShoppingCartItem({
                 {goldSilverCopperFormatter.format(item.totalPrice())}
               </div>
               <Button
-                onClick={() => onRemoveItem(item.id)}
+                onClick={onRemoveItem}
                 variant="ghost"
                 size="icon"
                 className="h-6 w-6 text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
@@ -76,7 +76,7 @@ export function ShoppingCartItem({
 
             <div className="flex items-center border rounded-md">
               <Button
-                onClick={() => onDecreaseQuantity(item.id)}
+                onClick={onDecreaseQuantity}
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 rounded-r-none p-0"
@@ -95,7 +95,7 @@ export function ShoppingCartItem({
               <Separator orientation="vertical" />
 
               <Button
-                onClick={() => onIncreaseQuantity(item.id)}
+                onClick={onIncreaseQuantity}
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 rounded-l-none p-0"

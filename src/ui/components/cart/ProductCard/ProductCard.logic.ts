@@ -1,4 +1,4 @@
-import type { KnowledgeProfile } from "@/types/Product";
+import type { KnowledgeProfile } from "@/domain/cart/value-objects/Product";
 import type { WelcomeModalSurvey } from "../../WelcomeModal/WelcomeModal.types";
 
 export const ProductCardLogic = {

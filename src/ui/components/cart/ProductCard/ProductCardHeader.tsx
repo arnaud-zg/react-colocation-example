@@ -1,7 +1,7 @@
-import { Badge } from "@/components/ui/badge";
-import { CardHeader } from "@/components/ui/card";
-import type { Product } from "../../../types/Product";
-import { goldSilverCopperFormatter } from "../GoldSilverCopperFormatter";
+import type { Product } from "@/domain/cart/value-objects/Product";
+import { goldSilverCopperFormatter } from "@/domain/currency/GoldSilverCopperFormatter";
+import { Badge } from "@/ui/primitives/badge";
+import { CardHeader } from "@/ui/primitives/card";
 
 interface ProductCardHeaderProps {
   product: Product;

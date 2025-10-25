@@ -1,5 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { CardFooter } from "@/components/ui/card";
+import type {
+  KnowledgeProfile,
+  Product,
+} from "@/domain/cart/value-objects/Product";
+import { Button } from "@/ui/primitives/button";
+import { CardFooter } from "@/ui/primitives/card";
 import {
   Modal,
   ModalContent,
@@ -7,9 +11,8 @@ import {
   ModalHeader,
   ModalTitle,
   ModalTrigger,
-} from "@/components/ui/modal";
+} from "@/ui/primitives/modal";
 import { BookOpenText, Clapperboard, ShoppingCart } from "lucide-react";
-import type { KnowledgeProfile, Product } from "../../../types/Product";
 
 interface ProductCardFooterProps {
   product: Product;

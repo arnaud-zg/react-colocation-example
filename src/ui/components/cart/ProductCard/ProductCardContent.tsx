@@ -1,5 +1,8 @@
-import { CardContent } from "@/components/ui/card";
-import type { KnowledgeProfile, Product } from "../../../types/Product";
+import type {
+  KnowledgeProfile,
+  Product,
+} from "@/domain/cart/value-objects/Product";
+import { CardContent } from "@/ui/primitives/card";
 
 interface ProductCardContentProps {
   product: Product;

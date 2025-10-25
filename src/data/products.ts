@@ -1,5 +1,5 @@
-import { Money } from "@/types/Money";
-import type { Product } from "../../types/Product";
+import { Money } from "@/domain/cart/value-objects/Money";
+import type { Product } from "@/domain/cart/value-objects/Product";
 
 export const PRODUCTS: Product[] = [
   {

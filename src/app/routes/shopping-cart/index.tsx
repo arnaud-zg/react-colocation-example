@@ -1,6 +1,6 @@
-import { WelcomeModal } from "@/components/WelcomeModal/WelcomeModal";
+import { ShoppingCart } from "@/ui/components/Cart/ShoppingCart";
+import { WelcomeModal } from "@/ui/components/WelcomeModal/WelcomeModal";
 import { createFileRoute } from "@tanstack/react-router";
-import { ShoppingCart } from "../../components/ShoppingCart";
 
 export const Route = createFileRoute("/shopping-cart/")({
   component: ShoppingCartRoute,

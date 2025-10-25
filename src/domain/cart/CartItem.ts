@@ -1,6 +1,6 @@
-import { Money } from "@/types/Money";
-import type { Product } from "@/types/Product";
-import { Quantity } from "@/types/Quantity";
+import { Money } from "@/domain/cart/value-objects/Money";
+import type { Product } from "@/domain/cart/value-objects/Product";
+import { Quantity } from "@/domain/cart/value-objects/Quantity";
 
 export class CartItem {
   static MAX_QUANTITY = 10; // Maximum allowed per item

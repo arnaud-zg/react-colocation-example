@@ -7,7 +7,9 @@ import {
   WelcomeModalSurveySchema,
 } from "./WelcomeModal.types";
 
-import { Button } from "@/components/ui/button";
+import { WelcomeModalLogic } from "./WelcomeModal.logic";
+
+import { Button } from "@/ui/primitives/button";
 import {
   Modal,
   ModalContent,
@@ -15,11 +17,18 @@ import {
   ModalFooter,
   ModalHeader,
   ModalTitle,
-} from "@/components/ui/modal";
-import { WelcomeModal } from "./WelcomeModal";
-import { WelcomeModalLogic } from "./WelcomeModal.logic";
+} from "@/ui/primitives/modal";
+import { forwardRef } from "react";
+import { useWelcomeModalHandle } from "./WelcomeModal.logic";
+import {
+  WelcomeModalStorageLogic,
+  useWelcomeModalSurvey,
+} from "./WelcomeModal.storage";
+import type { WelcomeModalComponentType } from "./WelcomeModal.types";
 
-export const WelcomeModalComponent = (
+export type { WelcomeModalHandle } from "./WelcomeModal.types";
+
+const WelcomeModalComponent = (
   { title, description, actionLabel = "Continue", onAction }: WelcomeModalProps,
   ref: Ref<WelcomeModalHandle>
 ) => {
@@ -146,3 +155,10 @@ export const WelcomeModalComponent = (
     </Modal>
   );
 };
+
+export const WelcomeModal = Object.assign(forwardRef(WelcomeModalComponent), {
+  useWelcomeModalHandle,
+  useWelcomeModalSurvey,
+  WelcomeModalStorageLogic,
+  displayName: "WelcomeModal",
+}) satisfies WelcomeModalComponentType;

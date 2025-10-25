@@ -1,4 +1,4 @@
-import { Money } from "@/types/Money";
+import { Money } from "@/domain/cart/value-objects/Money";
 
 export class ShippingPolicy {
   static SHIPPING_THRESHOLD = new Money(50);
