@@ -7,11 +7,12 @@ import {
 } from "lucide-react";
 
 import { PRODUCTS } from "@/data/products";
+import { Cart } from "@/domain/cart/Cart";
 import { ShippingPolicy } from "@/domain/cart/policy/ShippingPolicy";
 import { Money } from "@/domain/cart/value-objects/Money";
 import { goldSilverCopperFormatter } from "@/domain/currency/GoldSilverCopperFormatter";
+import { useImmutableClass } from "@/lib/useImmutableClass";
 import { ShoppingCartItem } from "@/ui/components/Cart/ShoppingCartItem";
-import { useCart } from "@/ui/components/Cart/useCart";
 import { WelcomeModal } from "@/ui/components/WelcomeModal/WelcomeModal";
 import { WelcomeModalLogic } from "@/ui/components/WelcomeModal/WelcomeModal.logic";
 import type { WelcomeModalHandle } from "@/ui/components/WelcomeModal/WelcomeModal.types";
@@ -42,11 +43,8 @@ interface ShoppingCartProps {
 
 export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
   const [showCart, setShowCart] = useState(false);
-  const { addItem, cart, decrementItem, deleteItem } = useCart();
+  const cart = useImmutableClass<Cart>(new Cart());
   const { welcomeModalSurvey } = WelcomeModal.useWelcomeModalSurvey();
-
-  const { subtotal, shipping, tax, total } = cart;
-  const totalItems = cart.totalItems;
   const selectedProfile = ProductCardLogic.selectProfile(
     welcomeModalSurvey?.skill ?? "beginner"
   );
@@ -87,7 +85,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
               variant="outline"
             >
               <ShoppingCartIcon className="h-4 w-4 mr-2" />
-              Cart <Badge className="ml-2">{totalItems.value}</Badge>
+              Cart <Badge className="ml-2">{cart.totalItems().value}</Badge>
             </Button>
           </div>
 
@@ -96,7 +94,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
               <ProductCard
                 key={product.id}
                 product={product}
-                onAddToCart={addItem}
+                onAddToCart={cart.addItem}
                 profile={selectedProfile}
               />
             ))}
@@ -116,7 +114,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                 </h2>
                 <div className="flex justify-center">
                   <Badge variant="outline" className="font-normal">
-                    {totalItems.value} items
+                    {cart.totalItems().value} items
                   </Badge>
                   <Button
                     variant="ghost"
@@ -131,7 +129,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
             </CardHeader>
 
             <CardContent className="pt-4 px-4">
-              {cart.isEmpty ? (
+              {cart.isEmpty() ? (
                 <motion.div
                   className="text-center py-12"
                   initial={{ opacity: 0 }}
@@ -170,15 +168,17 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           height: { duration: 0.5, ease: [0.4, 0.0, 0.2, 1] },
                         }}
                       >
-                        {cart.allItems.map((item) => (
+                        {cart.getItemsCopy().map((item) => (
                           <ShoppingCartItem
                             key={item.id}
                             item={item}
-                            onIncreaseQuantity={() => addItem(item.product)}
-                            onDecreaseQuantity={() =>
-                              decrementItem(item.product)
+                            onIncreaseQuantity={() =>
+                              cart.addItem(item.product)
                             }
-                            onRemoveItem={() => deleteItem(item.product)}
+                            onDecreaseQuantity={() =>
+                              cart.decrementItem(item.product)
+                            }
+                            onRemoveItem={() => cart.deleteItem(item.product)}
                           />
                         ))}
                       </motion.div>
@@ -213,7 +213,9 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             ease: [0.4, 0.0, 0.2, 1],
                           }}
                         >
-                          {goldSilverCopperFormatter.format(subtotal)}
+                          {goldSilverCopperFormatter.format(
+                            cart.calculateSubtotal()
+                          )}
                         </motion.span>
                       </div>
                     </motion.div>
@@ -236,7 +238,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             ease: [0.4, 0.0, 0.2, 1],
                           }}
                         >
-                          {shipping.amount === 0 ? (
+                          {cart.calculateShipping().amount === 0 ? (
                             <Badge
                               variant="outline"
                               className="text-green-600 bg-green-50 text-xs py-0 h-5"
@@ -245,7 +247,9 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             </Badge>
                           ) : (
                             <span className="font-medium text-sm whitespace-nowrap">
-                              {goldSilverCopperFormatter.format(shipping)}
+                              {goldSilverCopperFormatter.format(
+                                cart.calculateShipping()
+                              )}
                             </span>
                           )}
                         </motion.span>
@@ -270,7 +274,9 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             ease: [0.4, 0.0, 0.2, 1],
                           }}
                         >
-                          {goldSilverCopperFormatter.format(tax)}
+                          {goldSilverCopperFormatter.format(
+                            cart.calculateTax()
+                          )}
                         </motion.span>
                       </div>
                     </motion.div>
@@ -294,13 +300,15 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           ease: [0.4, 0.0, 0.2, 1],
                         }}
                       >
-                        {goldSilverCopperFormatter.format(total)}
+                        {goldSilverCopperFormatter.format(
+                          cart.calculateTotal()
+                        )}
                       </motion.span>
                     </div>
                   </motion.div>
 
                   <AnimatePresence>
-                    {subtotal.amount <
+                    {cart.calculateSubtotal().amount <
                       ShippingPolicy.SHIPPING_THRESHOLD.amount && (
                       <motion.div
                         className="bg-gray-50 border border-gray-200 rounded-md p-2 text-xs text-gray-700 mt-3"
@@ -340,7 +348,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           {goldSilverCopperFormatter.format(
                             new Money(
                               ShippingPolicy.SHIPPING_THRESHOLD.amount
-                            ).subtract(subtotal)
+                            ).subtract(cart.calculateSubtotal())
                           )}{" "}
                           more to earn free delivery by griffin!
                         </motion.span>
@@ -355,7 +363,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
               <Modal>
                 <ModalTrigger className="flex-1" asChild>
                   <Button
-                    disabled={cart.isEmpty}
+                    disabled={cart.isEmpty()}
                     className="w-full"
                     size="default"
                   >
