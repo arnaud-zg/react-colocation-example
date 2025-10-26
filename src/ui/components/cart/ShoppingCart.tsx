@@ -11,7 +11,7 @@ import { Cart } from "@/domain/cart/Cart";
 import { ShippingPolicy } from "@/domain/cart/policy/ShippingPolicy";
 import { Money } from "@/domain/cart/value-objects/Money";
 import { goldSilverCopperFormatter } from "@/domain/currency/GoldSilverCopperFormatter";
-import { useImmutableClass } from "@/lib/useImmutableClass";
+import { useImmutableInstance } from "@/lib/useImmutableInstance";
 import { ShoppingCartItem } from "@/ui/components/Cart/ShoppingCartItem";
 import { WelcomeModal } from "@/ui/components/WelcomeModal/WelcomeModal";
 import { WelcomeModalLogic } from "@/ui/components/WelcomeModal/WelcomeModal.logic";
@@ -34,6 +34,7 @@ import {
 } from "@/ui/primitives/modal";
 import { Separator } from "@/ui/primitives/separator";
 import { type FC, type RefObject, useState } from "react";
+import { welcomeStorage } from "../WelcomeModal/WelcomeModal.storage";
 import { ProductCard } from "./ProductCard/ProductCard";
 import { ProductCardLogic } from "./ProductCard/ProductCard.logic";
 
@@ -43,10 +44,10 @@ interface ShoppingCartProps {
 
 export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
   const [showCart, setShowCart] = useState(false);
-  const cart = useImmutableClass<Cart>(new Cart());
-  const { welcomeModalSurvey } = WelcomeModal.useWelcomeModalSurvey();
+  const cart = useImmutableInstance<Cart>(new Cart());
+  const { survey } = WelcomeModal.useWelcomeModalSurvey(welcomeStorage);
   const selectedProfile = ProductCardLogic.selectProfile(
-    welcomeModalSurvey?.skill ?? "beginner"
+    survey?.skill ?? "beginner"
   );
 
   return (
@@ -59,9 +60,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
           size="default"
           onClick={() => welcomeModalHandle.current.open()}
         >
-          {WelcomeModalLogic.selectSkillLabels(
-            welcomeModalSurvey?.skill ?? "beginner"
-          )}
+          {WelcomeModalLogic.selectSkillLabels(survey?.skill ?? "beginner")}
         </Button>
       </div>
 

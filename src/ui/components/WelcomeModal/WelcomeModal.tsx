@@ -20,10 +20,7 @@ import {
 } from "@/ui/primitives/modal";
 import { forwardRef } from "react";
 import { useWelcomeModalHandle } from "./WelcomeModal.logic";
-import {
-  WelcomeModalStorageLogic,
-  useWelcomeModalSurvey,
-} from "./WelcomeModal.storage";
+import { useWelcomeModalSurvey, welcomeStorage } from "./WelcomeModal.storage";
 import type { WelcomeModalComponentType } from "./WelcomeModal.types";
 
 export type { WelcomeModalHandle } from "./WelcomeModal.types";
@@ -33,9 +30,10 @@ const WelcomeModalComponent = (
   ref: Ref<WelcomeModalHandle>
 ) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { survey, saveSurvey } =
+    WelcomeModal.useWelcomeModalSurvey(welcomeStorage);
   const form = useForm({
-    defaultValues:
-      WelcomeModal.WelcomeModalStorageLogic.getWelcomeModalSurvey(),
+    defaultValues: survey,
     onSubmit: async ({ value }) => {
       if (!value) return;
 
@@ -48,7 +46,7 @@ const WelcomeModalComponent = (
       };
 
       onAction?.(nextValue);
-      WelcomeModal.WelcomeModalStorageLogic.saveWelcomeSurvey(nextValue);
+      saveSurvey(nextValue);
       setIsOpen(false);
     },
   });
@@ -159,6 +157,6 @@ const WelcomeModalComponent = (
 export const WelcomeModal = Object.assign(forwardRef(WelcomeModalComponent), {
   useWelcomeModalHandle,
   useWelcomeModalSurvey,
-  WelcomeModalStorageLogic,
+  welcomeStorage,
   displayName: "WelcomeModal",
 }) satisfies WelcomeModalComponentType;

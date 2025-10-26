@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { WelcomeModalStorageLogic } from "./WelcomeModal.storage";
+import { WelcomeModal } from "./WelcomeModal";
+import { welcomeStorage } from "./WelcomeModal.storage";
 import type {
   WelcomeModalHandle,
   WelcomeModalSurvey,
@@ -10,7 +11,8 @@ export const useWelcomeModalHandle = () => {
     open: () => {},
     close: () => {},
   });
-  const welcomeModalSurvey = WelcomeModalStorageLogic.getWelcomeModalSurvey();
+  const { survey: welcomeModalSurvey } =
+    WelcomeModal.useWelcomeModalSurvey(welcomeStorage);
   const hasSubmittedData = !!welcomeModalSurvey;
 
   useEffect(() => {
