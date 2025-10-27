@@ -34,7 +34,6 @@ import {
 } from "@/ui/primitives/modal";
 import { Separator } from "@/ui/primitives/separator";
 import { type FC, type RefObject, useState } from "react";
-import { welcomeStorage } from "../WelcomeModal/WelcomeModal.storage";
 import { ProductCard } from "./ProductCard/ProductCard";
 import { ProductCardLogic } from "./ProductCard/ProductCard.logic";
 
@@ -45,7 +44,7 @@ interface ShoppingCartProps {
 export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
   const [showCart, setShowCart] = useState(false);
   const cart = useImmutableInstance<Cart>(new Cart());
-  const { survey } = WelcomeModal.useWelcomeModalSurvey(welcomeStorage);
+  const { survey } = WelcomeModal.useWelcomeModalSurvey();
   const selectedProfile = ProductCardLogic.selectProfile(
     survey?.skill ?? "beginner"
   );

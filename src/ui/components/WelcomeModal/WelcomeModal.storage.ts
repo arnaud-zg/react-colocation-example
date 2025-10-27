@@ -6,17 +6,16 @@ import type { WelcomeStorageRepository } from "./WelcomeStorage/WelcomeStorage.r
 export const welcomeStorage: WelcomeStorageRepository =
   new LocalStorageWelcomeStorageRepository();
 
-export const useWelcomeModalSurvey = (
-  welcomeStorage: WelcomeStorageRepository
-) => {
+export const useWelcomeModalSurvey = () => {
   const [survey, setSurvey] = useState(welcomeStorage.getSurvey());
 
   useEffect(() => {
     const unsubscribe = welcomeStorage.subscribe(() => {
       setSurvey(welcomeStorage.getSurvey());
     });
+
     return unsubscribe;
-  }, [welcomeStorage]);
+  }, []);
 
   const saveSurvey = (data: WelcomeModalSurvey) => {
     welcomeStorage.saveSurvey(data);

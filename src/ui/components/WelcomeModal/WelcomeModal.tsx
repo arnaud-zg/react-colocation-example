@@ -30,8 +30,7 @@ const WelcomeModalComponent = (
   ref: Ref<WelcomeModalHandle>
 ) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { survey, saveSurvey } =
-    WelcomeModal.useWelcomeModalSurvey(welcomeStorage);
+  const { survey, saveSurvey } = WelcomeModal.useWelcomeModalSurvey();
   const form = useForm({
     defaultValues: survey,
     onSubmit: async ({ value }) => {
