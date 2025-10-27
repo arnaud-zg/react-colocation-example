@@ -5,10 +5,6 @@ export class Quantity {
     }
   }
 
-  get value(): number {
-    return this._value;
-  }
-
   add(other: Quantity): Quantity {
     return new Quantity(this._value + other._value);
   }
@@ -22,5 +18,9 @@ export class Quantity {
       throw new Error("Quantity cannot be less than 0");
     }
     return new Quantity(this._value - 1);
+  }
+
+  toValue(): number {
+    return this._value;
   }
 }

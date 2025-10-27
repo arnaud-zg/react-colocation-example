@@ -5,7 +5,7 @@ export class ShippingPolicy {
   static SHIPPING_COST = new Money(5.99);
 
   static calculate(subtotal: Money): Money {
-    return subtotal.amount >= ShippingPolicy.SHIPPING_THRESHOLD.amount
+    return subtotal.toAmount() >= ShippingPolicy.SHIPPING_THRESHOLD.toAmount()
       ? new Money(0)
       : ShippingPolicy.SHIPPING_COST;
   }

@@ -83,14 +83,14 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
               variant="outline"
             >
               <ShoppingCartIcon className="h-4 w-4 mr-2" />
-              Cart <Badge className="ml-2">{cart.totalItems().value}</Badge>
+              Cart <Badge className="ml-2">{cart.totalItems().toValue()}</Badge>
             </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {PRODUCTS.map((product) => (
               <ProductCard
-                key={product.id}
+                key={product.displayId()}
                 product={product}
                 onAddToCart={cart.addItem}
                 profile={selectedProfile}
@@ -112,7 +112,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                 </h2>
                 <div className="flex justify-center">
                   <Badge variant="outline" className="font-normal">
-                    {cart.totalItems().value} items
+                    {cart.totalItems().toValue()} items
                   </Badge>
                   <Button
                     variant="ghost"
@@ -168,15 +168,17 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                       >
                         {cart.getItemsCopy().map((item) => (
                           <ShoppingCartItem
-                            key={item.id}
+                            key={item.getId()}
                             item={item}
                             onIncreaseQuantity={() =>
-                              cart.addItem(item.product)
+                              cart.addItem(item.getProduct())
                             }
                             onDecreaseQuantity={() =>
-                              cart.decrementItem(item.product)
+                              cart.decrementItem(item.getProduct())
                             }
-                            onRemoveItem={() => cart.deleteItem(item.product)}
+                            onRemoveItem={() =>
+                              cart.deleteItem(item.getProduct())
+                            }
                           />
                         ))}
                       </motion.div>
@@ -236,7 +238,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                             ease: [0.4, 0.0, 0.2, 1],
                           }}
                         >
-                          {cart.calculateShipping().amount === 0 ? (
+                          {cart.calculateShipping().toAmount() === 0 ? (
                             <Badge
                               variant="outline"
                               className="text-green-600 bg-green-50 text-xs py-0 h-5"
@@ -306,8 +308,8 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                   </motion.div>
 
                   <AnimatePresence>
-                    {cart.calculateSubtotal().amount <
-                      ShippingPolicy.SHIPPING_THRESHOLD.amount && (
+                    {cart.calculateSubtotal().toAmount() <
+                      ShippingPolicy.SHIPPING_THRESHOLD.toAmount() && (
                       <motion.div
                         className="bg-gray-50 border border-gray-200 rounded-md p-2 text-xs text-gray-700 mt-3"
                         initial={{
@@ -345,7 +347,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
                           Add{" "}
                           {goldSilverCopperFormatter.format(
                             new Money(
-                              ShippingPolicy.SHIPPING_THRESHOLD.amount
+                              ShippingPolicy.SHIPPING_THRESHOLD.toAmount()
                             ).subtract(cart.calculateSubtotal())
                           )}{" "}
                           more to earn free delivery by griffin!

@@ -5,10 +5,6 @@ export class Money {
     }
   }
 
-  get amount(): number {
-    return this._amount;
-  }
-
   add(other: Money): Money {
     return new Money(this._amount + other._amount);
   }
@@ -25,5 +21,9 @@ export class Money {
 
   multiply(factor: number): Money {
     return new Money(this._amount * factor);
+  }
+
+  toAmount(): number {
+    return this._amount;
   }
 }

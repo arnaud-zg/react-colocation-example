@@ -1,64 +1,79 @@
 import { Money } from "@/domain/cart/value-objects/Money";
-import type { Product } from "@/domain/cart/value-objects/Product";
+import type { Product } from "@/domain/cart/value-objects/Product/Product";
 import { Quantity } from "@/domain/cart/value-objects/Quantity";
 
 export class CartItem {
-  static MAX_QUANTITY = 10; // Maximum allowed per item
-  static MIN_QUANTITY = 1; // Minimum allowed per item
+  static MAX_QUANTITY = 10;
+  static MIN_QUANTITY = 1;
 
   constructor(
-    private _product: Product,
-    private _quantity: Quantity
+    private readonly product: Product,
+    private readonly quantity: Quantity
   ) {}
 
-  get id() {
-    return this._product.id;
-  }
-
-  get name() {
-    return this._product.name;
-  }
-
-  get product(): Product {
-    return this._product;
-  }
-
-  get quantity(): Quantity {
-    return this._quantity;
-  }
-
-  get price(): Money {
-    return new Money(this._product.price.amount);
-  }
-
-  get imageUrl() {
-    return this._product.imageUrl;
-  }
-
   increaseQuantity(): CartItem {
-    if (this.quantity.value >= CartItem.MAX_QUANTITY) {
-      return this; // already at max
+    const currentValue = this.quantity.toValue();
+
+    if (currentValue >= CartItem.MAX_QUANTITY) {
+      return this;
     }
-    return new CartItem(this._product, this.quantity.increment());
+
+    const newQuantity = this.quantity.increment();
+    return new CartItem(this.product, newQuantity);
   }
 
   decreaseQuantity(): CartItem {
-    if (this.quantity.value <= CartItem.MIN_QUANTITY) {
-      return this; // already at min
+    const currentValue = this.quantity.toValue();
+
+    if (currentValue <= CartItem.MIN_QUANTITY) {
+      return this;
     }
-    return new CartItem(this._product, this.quantity.decrement());
+
+    const newQuantity = this.quantity.decrement();
+    return new CartItem(this.product, newQuantity);
   }
 
   updateQuantity(newQuantity: Quantity): CartItem {
-    // Clamp quantity between min and max
-    let value = newQuantity.value;
-    if (value < CartItem.MIN_QUANTITY) value = CartItem.MIN_QUANTITY;
-    if (value > CartItem.MAX_QUANTITY) value = CartItem.MAX_QUANTITY;
+    let value = newQuantity.toValue();
 
-    return new CartItem(this._product, new Quantity(value));
+    if (value < CartItem.MIN_QUANTITY) {
+      value = CartItem.MIN_QUANTITY;
+    }
+
+    if (value > CartItem.MAX_QUANTITY) {
+      value = CartItem.MAX_QUANTITY;
+    }
+
+    const clampedQuantity = new Quantity(value);
+    return new CartItem(this.product, clampedQuantity);
   }
 
   totalPrice(): Money {
-    return this.price.multiply(this.quantity.value);
+    const pricePerUnit = new Money(this.product.displayPrice().toAmount());
+    return pricePerUnit.multiply(this.quantity.toValue());
+  }
+
+  getId(): string {
+    return this.product.displayId();
+  }
+
+  getName(): string {
+    return this.product.displayName();
+  }
+
+  getImage(): string {
+    return this.product.displayImage();
+  }
+
+  getQuantity(): Quantity {
+    return this.quantity;
+  }
+
+  getPrice(): Money {
+    return this.product.displayPrice();
+  }
+
+  getProduct(): Product {
+    return this.product;
   }
 }

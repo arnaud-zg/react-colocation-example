@@ -43,16 +43,16 @@ export function ShoppingCartItem({
           <div className="flex items-center gap-4">
             <div className="relative w-14 h-14 flex-shrink-0 overflow-hidden rounded-md bg-gray-100">
               <img
-                src={item.imageUrl}
-                alt={item.name}
+                src={item.getImage()}
+                alt={item.getName()}
                 className="absolute h-full w-full object-cover"
               />
             </div>
             <div>
-              <h4 className="font-medium text-gray-900">{item.name}</h4>
+              <h4 className="font-medium text-gray-900">{item.getName()}</h4>
               <div className="mt-0.5 flex items-center">
                 <span className="text-xs text-gray-500">
-                  {goldSilverCopperFormatter.format(item.price)} each
+                  {goldSilverCopperFormatter.format(item.getPrice())} each
                 </span>
               </div>
             </div>
@@ -81,7 +81,7 @@ export function ShoppingCartItem({
                 size="icon"
                 className="h-7 w-7 rounded-r-none p-0"
                 aria-label="Decrease quantity"
-                disabled={item.quantity.value <= 1}
+                disabled={item.getQuantity().toValue() <= 1}
               >
                 <Minus className="h-3 w-3" />
               </Button>
@@ -89,7 +89,7 @@ export function ShoppingCartItem({
               <Separator orientation="vertical" />
 
               <span className="px-3 py-0.5 text-center min-w-[30px] text-sm">
-                {item.quantity.value}
+                {item.getQuantity().toValue()}
               </span>
 
               <Separator orientation="vertical" />
@@ -100,7 +100,7 @@ export function ShoppingCartItem({
                 size="icon"
                 className="h-7 w-7 rounded-l-none p-0"
                 aria-label="Increase quantity"
-                disabled={item.quantity.value >= CartItem.MAX_QUANTITY}
+                disabled={item.getQuantity().toValue() >= CartItem.MAX_QUANTITY}
               >
                 <Plus className="h-3 w-3" />
               </Button>

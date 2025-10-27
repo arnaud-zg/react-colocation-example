@@ -1,7 +1,7 @@
 import type {
   KnowledgeProfile,
   Product,
-} from "@/domain/cart/value-objects/Product";
+} from "@/domain/cart/value-objects/Product/Product";
 import { Button } from "@/ui/primitives/button";
 import { CardFooter } from "@/ui/primitives/card";
 import {
@@ -25,7 +25,8 @@ export function ProductCardFooter({
   profile,
   onAddToCart,
 }: ProductCardFooterProps) {
-  const details = product.knowledge[profile];
+  const loreLink = product.getLoreLink(profile);
+  const videoUrl = product.getVideoUrl(profile);
 
   return (
     <CardFooter className="p-4 pt-0 flex flex-col gap-2">
@@ -50,13 +51,13 @@ export function ProductCardFooter({
         <ModalContent className="rounded-2xl shadow-lg">
           <ModalHeader>
             <ModalTitle className="text-center text-xl font-semibold">
-              {product.name}
+              {product.displayName()}
             </ModalTitle>
             <ModalDescription className="mt-2 text-center text-base">
               <iframe
                 className="w-full min-h-[315px]"
-                src={`${details.extraResources.videoUrl}?autoplay=1`}
-                title={product.name}
+                src={`${videoUrl}?autoplay=1`}
+                title={product.displayName()}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
@@ -66,10 +67,10 @@ export function ProductCardFooter({
         </ModalContent>
       </Modal>
 
-      {profile !== "beginning" && (
+      {profile !== "beginner" && (
         <Button
           onClick={() => {
-            window.open(details.extraResources.loreLink, "_blank");
+            window.open(loreLink, "_blank");
           }}
           className="w-full flex items-center justify-center gap-2"
           variant="link"

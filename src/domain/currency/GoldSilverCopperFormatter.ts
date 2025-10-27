@@ -6,7 +6,7 @@ import type { Money } from "@/domain/cart/value-objects/Money";
  */
 class GoldSilverCopperFormatter {
   convertCopper(copper: Money) {
-    const safeCopper = Math.round(copper.amount);
+    const safeCopper = Math.round(copper.toAmount());
 
     const gold = Math.floor(safeCopper / 10000);
     const remainderAfterGold = safeCopper - gold * 10000;
