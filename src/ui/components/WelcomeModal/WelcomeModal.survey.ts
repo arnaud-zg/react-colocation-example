@@ -1,10 +1,10 @@
+import type { WelcomeSurveyData } from "@/domain/welcomeSurvey/WelcomeSurvey.data";
+import type { WelcomeStorageRepository } from "@/domain/welcomeSurvey/WelcomeSurveyStorage.repository";
 import { useEffect, useState } from "react";
-import type { WelcomeModalSurvey } from "./WelcomeModal.types";
-import { LocalStorageWelcomeStorageRepository } from "./WelcomeStorage/LocalStorageWelcomeStorage.repository";
-import type { WelcomeStorageRepository } from "./WelcomeStorage/WelcomeStorage.repository";
+import { LocalStorageWelcomeSurveyRepository } from "./WelcomeStorage/LocalStorageWelcomeSurvey.repository";
 
 export const welcomeStorage: WelcomeStorageRepository =
-  new LocalStorageWelcomeStorageRepository();
+  new LocalStorageWelcomeSurveyRepository();
 
 export const useWelcomeModalSurvey = () => {
   const [survey, setSurvey] = useState(welcomeStorage.getSurvey());
@@ -17,7 +17,7 @@ export const useWelcomeModalSurvey = () => {
     return unsubscribe;
   }, []);
 
-  const saveSurvey = (data: WelcomeModalSurvey) => {
+  const saveSurvey = (data: WelcomeSurveyData) => {
     welcomeStorage.saveSurvey(data);
   };
 

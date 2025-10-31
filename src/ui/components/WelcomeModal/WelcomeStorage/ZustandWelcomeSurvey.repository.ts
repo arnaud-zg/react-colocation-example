@@ -1,16 +1,16 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import type { WelcomeModalSurvey } from "../WelcomeModal.types";
-import type { WelcomeStorageRepository } from "./WelcomeStorage.repository";
+import type { WelcomeSurveyData } from "@/domain/welcomeSurvey/WelcomeSurvey.data";
+import type { WelcomeStorageRepository } from "@/domain/welcomeSurvey/WelcomeSurveyStorage.repository";
 
 interface WelcomeModalState {
-  survey: WelcomeModalSurvey | null;
-  setSurvey: (data: WelcomeModalSurvey) => void;
+  survey: WelcomeSurveyData | null;
+  setSurvey: (data: WelcomeSurveyData) => void;
 }
 
 // Zustand repository for Welcome Modal
-export class ZustandWelcomeStorageRepository
+export class ZustandWelcomeSurveyRepository
   implements WelcomeStorageRepository
 {
   private store = create<WelcomeModalState>()(
@@ -23,11 +23,11 @@ export class ZustandWelcomeStorageRepository
     )
   );
 
-  getSurvey(): WelcomeModalSurvey | null {
+  getSurvey(): WelcomeSurveyData | null {
     return this.store.getState().survey;
   }
 
-  saveSurvey(data: WelcomeModalSurvey): void {
+  saveSurvey(data: WelcomeSurveyData): void {
     this.store.getState().setSurvey(data);
   }
 

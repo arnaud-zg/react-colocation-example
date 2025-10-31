@@ -1,14 +1,13 @@
 import { useForm } from "@tanstack/react-form";
 import { type Ref, useImperativeHandle, useState } from "react";
 
-import {
-  type WelcomeModalHandle,
-  type WelcomeModalProps,
-  WelcomeModalSurveySchema,
+import type {
+  WelcomeModalHandle,
+  WelcomeModalProps,
 } from "./WelcomeModal.types";
 
-import { WelcomeModalLogic } from "./WelcomeModal.logic";
-
+import { WelcomeSurvey } from "@/domain/welcomeSurvey/WelcomeSurvey";
+import { WelcomeSurveyDataSchema } from "@/domain/welcomeSurvey/WelcomeSurvey.data";
 import { Button } from "@/ui/primitives/button";
 import {
   Modal,
@@ -20,7 +19,7 @@ import {
 } from "@/ui/primitives/modal";
 import { forwardRef } from "react";
 import { useWelcomeModalHandle } from "./WelcomeModal.logic";
-import { useWelcomeModalSurvey, welcomeStorage } from "./WelcomeModal.storage";
+import { useWelcomeModalSurvey } from "./WelcomeModal.survey";
 import type { WelcomeModalComponentType } from "./WelcomeModal.types";
 
 export type { WelcomeModalHandle } from "./WelcomeModal.types";
@@ -75,7 +74,7 @@ const WelcomeModalComponent = (
               validators={{
                 onChange: ({ value }) => {
                   const { success } =
-                    WelcomeModalSurveySchema.shape.skill.safeParse(value);
+                    WelcomeSurveyDataSchema.shape.skill.safeParse(value);
 
                   if (success) return;
                   return "Please select a valid skill level.";
@@ -97,7 +96,7 @@ const WelcomeModalComponent = (
                     value={field.state.value}
                     onChange={(e) => {
                       const { data: safeValue } =
-                        WelcomeModalSurveySchema.shape.skill.safeParse(
+                        WelcomeSurveyDataSchema.shape.skill.safeParse(
                           e.target.value
                         );
 
@@ -108,13 +107,13 @@ const WelcomeModalComponent = (
                   >
                     <option value="">-- Select knowledge level --</option>
                     <option value="beginner">
-                      {WelcomeModalLogic.selectSkillLabels("beginner")}
+                      {WelcomeSurvey.selectSkillLabel("beginner")}
                     </option>
                     <option value="intermediate">
-                      {WelcomeModalLogic.selectSkillLabels("intermediate")}
+                      {WelcomeSurvey.selectSkillLabel("intermediate")}
                     </option>
                     <option value="expert">
-                      {WelcomeModalLogic.selectSkillLabels("expert")}
+                      {WelcomeSurvey.selectSkillLabel("expert")}
                     </option>
                   </select>
                   {field.state.meta.isTouched &&
@@ -156,6 +155,5 @@ const WelcomeModalComponent = (
 export const WelcomeModal = Object.assign(forwardRef(WelcomeModalComponent), {
   useWelcomeModalHandle,
   useWelcomeModalSurvey,
-  welcomeStorage,
   displayName: "WelcomeModal",
 }) satisfies WelcomeModalComponentType;

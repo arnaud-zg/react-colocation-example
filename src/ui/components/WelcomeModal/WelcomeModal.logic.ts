@@ -1,9 +1,6 @@
 import { useEffect, useRef } from "react";
 import { WelcomeModal } from "./WelcomeModal";
-import type {
-  WelcomeModalHandle,
-  WelcomeModalSurvey,
-} from "./WelcomeModal.types";
+import type { WelcomeModalHandle } from "./WelcomeModal.types";
 
 export const useWelcomeModalHandle = () => {
   const ref = useRef<WelcomeModalHandle>({
@@ -21,21 +18,3 @@ export const useWelcomeModalHandle = () => {
 
   return { ref };
 };
-
-export class WelcomeModalLogic {
-  static selectSkillLabels = (skill: WelcomeModalSurvey["skill"]): string => {
-    switch (skill) {
-      case "beginner":
-        return "✨ Beginner Explorer";
-      case "intermediate":
-        return "🧙‍♂️ Adept Seeker";
-      case "expert":
-        return "🌌 Master Mystic";
-
-      default:
-        throw new Error(
-          `selectSkillLabels: Unknown skill "${skill}". Expected "beginner", "intermediate", or "expert".`
-        );
-    }
-  };
-}

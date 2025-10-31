@@ -1,8 +1,8 @@
 import type { KnowledgeProfile } from "@/domain/cart/value-objects/Product/Product";
-import type { WelcomeModalSurvey } from "../../WelcomeModal/WelcomeModal.types";
+import type { WelcomeSurveyData } from "@/domain/welcomeSurvey/WelcomeSurvey.data";
 
 export const ProductCardLogic = {
-  selectProfile: (skill: WelcomeModalSurvey["skill"]): KnowledgeProfile => {
+  selectProfile: (skill: WelcomeSurveyData["skill"]): KnowledgeProfile => {
     switch (skill) {
       case "expert":
         return "expert";

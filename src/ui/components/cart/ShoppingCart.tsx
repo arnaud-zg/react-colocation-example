@@ -11,10 +11,10 @@ import { Cart } from "@/domain/cart/Cart";
 import { ShippingPolicy } from "@/domain/cart/policy/ShippingPolicy";
 import { Money } from "@/domain/cart/value-objects/Money";
 import { goldSilverCopperFormatter } from "@/domain/currency/GoldSilverCopperFormatter";
+import { WelcomeSurvey } from "@/domain/welcomeSurvey/WelcomeSurvey";
 import { useImmutableInstance } from "@/lib/useImmutableInstance";
 import { ShoppingCartItem } from "@/ui/components/Cart/ShoppingCartItem";
 import { WelcomeModal } from "@/ui/components/WelcomeModal/WelcomeModal";
-import { WelcomeModalLogic } from "@/ui/components/WelcomeModal/WelcomeModal.logic";
 import type { WelcomeModalHandle } from "@/ui/components/WelcomeModal/WelcomeModal.types";
 import { Badge } from "@/ui/primitives/badge";
 import { Button } from "@/ui/primitives/button";
@@ -59,7 +59,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
           size="default"
           onClick={() => welcomeModalHandle.current.open()}
         >
-          {WelcomeModalLogic.selectSkillLabels(survey?.skill ?? "beginner")}
+          {WelcomeSurvey.selectSkillLabel(survey?.skill ?? "beginner")}
         </Button>
       </div>
 
