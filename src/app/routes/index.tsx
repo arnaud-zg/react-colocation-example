@@ -20,12 +20,14 @@ function App() {
         Maintainable Frontend Architecture with React
       </h1>
       <p className="max-w-3xl mb-8 text-center leading-relaxed text-gray-300">
-        This demo is an example showing the benefits of organizing code using
-        colocation — keeping related components, logic, and data together.
+        This site is a hands-on demo showing how to apply{" "}
+        <strong>Object Calisthenics</strong> in a front-end app. You'll see how
+        keeping objects small, simple, and focused makes your React code easier
+        to understand and maintain.
       </p>
       <p className="max-w-3xl mb-8 text-center leading-relaxed text-gray-300">
-        Spend some time exploring the experience first, then take a look at the
-        code to see how it works under the hood.
+        Take a few moments to explore the interactive experience, then dive into
+        the code to see these principles in action.
       </p>
 
       <div className="flex flex-col gap-2">
