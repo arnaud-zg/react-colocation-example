@@ -5,3 +5,5 @@ export interface WelcomeStorageRepository {
   saveSurvey(data: WelcomeSurveyData): void;
   subscribe(callback: VoidFunction): VoidFunction;
 }
+
+export type Listener = () => void;

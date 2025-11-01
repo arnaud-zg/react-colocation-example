@@ -2,54 +2,62 @@ import {
   type WelcomeSurveyData,
   WelcomeSurveyDataSchema,
 } from "@/domain/welcomeSurvey/WelcomeSurvey.data";
-import type { WelcomeStorageRepository } from "@/domain/welcomeSurvey/WelcomeSurveyStorage.repository";
+import type {
+  Listener,
+  WelcomeStorageRepository,
+} from "@/domain/welcomeSurvey/WelcomeSurveyStorage.repository";
 
 export class LocalStorageWelcomeSurveyRepository
   implements WelcomeStorageRepository
 {
-  private static LOCAL_STORAGE_KEY = "welcome_modal_seen";
-  private static EVENT_TYPE = `local-storage:${LocalStorageWelcomeSurveyRepository.LOCAL_STORAGE_KEY}`;
+  private static readonly STORAGE_KEY = "welcome_survey";
 
-  getSurvey(): WelcomeSurveyData | null {
+  private listeners = new Set<Listener>();
+  private cache: WelcomeSurveyData | null | undefined = undefined;
+
+  getSurvey = (): WelcomeSurveyData | null => {
+    if (this.cache !== undefined) {
+      return this.cache;
+    }
+
     const rawData = localStorage.getItem(
-      LocalStorageWelcomeSurveyRepository.LOCAL_STORAGE_KEY
+      LocalStorageWelcomeSurveyRepository.STORAGE_KEY
     );
-    if (!rawData) return null;
-
-    try {
-      const data = JSON.parse(rawData);
-      const { data: survey } = WelcomeSurveyDataSchema.safeParse(data);
-      return survey || null;
-    } catch {
+    if (!rawData) {
+      this.cache = null;
       return null;
     }
-  }
 
-  saveSurvey(data: WelcomeSurveyData): void {
-    localStorage.setItem(
-      LocalStorageWelcomeSurveyRepository.LOCAL_STORAGE_KEY,
-      JSON.stringify(data)
-    );
+    try {
+      const parsed = WelcomeSurveyDataSchema.safeParse(JSON.parse(rawData));
+      this.cache = parsed.success ? parsed.data : null;
+    } catch {
+      this.cache = null;
+    }
 
-    window.dispatchEvent(
-      new Event(LocalStorageWelcomeSurveyRepository.EVENT_TYPE)
-    );
-  }
+    return this.cache;
+  };
 
-  subscribe(callback: () => void): () => void {
-    const handler = () => {
-      callback();
-    };
-
-    window.addEventListener(
-      LocalStorageWelcomeSurveyRepository.EVENT_TYPE,
-      handler
-    );
-
-    return () =>
-      window.removeEventListener(
-        LocalStorageWelcomeSurveyRepository.EVENT_TYPE,
-        handler
+  saveSurvey = (data: WelcomeSurveyData): void => {
+    try {
+      localStorage.setItem(
+        LocalStorageWelcomeSurveyRepository.STORAGE_KEY,
+        JSON.stringify(data)
       );
-  }
+
+      this.cache = data;
+
+      for (const listener of this.listeners) {
+        listener();
+      }
+    } catch (err) {
+      console.error("Failed to save survey:", err);
+    }
+  };
+
+  subscribe = (listener: Listener): (() => void) => {
+    this.listeners.add(listener);
+
+    return () => this.listeners.delete(listener);
+  };
 }
