@@ -3,11 +3,11 @@ import type { WelcomeStorageRepository } from "@/domain/welcomeSurvey/WelcomeSur
 import { useImmutableInstance } from "@/lib/useImmutableInstance";
 import { useSyncExternalStore } from "react";
 // import { LocalStorageWelcomeSurveyRepository } from "./WelcomeStorage/LocalStorageWelcomeSurvey.repository";
-// import { TanStackWelcomeSurveyRepository } from "./WelcomeStorage/TanstackStoreWelcomeSurvey.repository";
-import { ZustandWelcomeSurveyRepository } from "./WelcomeStorage/ZustandWelcomeSurvey.repository";
+import { TanStackWelcomeSurveyRepository } from "./WelcomeStorage/TanstackStoreWelcomeSurvey.repository";
+// import { ZustandWelcomeSurveyRepository } from "./WelcomeStorage/ZustandWelcomeSurvey.repository";
 
 export const welcomeStorage: WelcomeStorageRepository =
-  new ZustandWelcomeSurveyRepository();
+  new TanStackWelcomeSurveyRepository();
 
 export const useWelcomeModalSurvey = () => {
   const welcomeSurvey = useSyncExternalStore(
