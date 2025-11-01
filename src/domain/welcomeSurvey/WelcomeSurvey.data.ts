@@ -1,17 +1,8 @@
 import { z } from "zod";
+import { SkillValueSchema } from "./value-objects/Skill";
 
 export const WelcomeSurveyDataSchema = z.object({
-  skill: z.union([
-    z.literal("beginner"),
-    z.literal("intermediate"),
-    z.literal("expert"),
-  ]),
-  _metadata: z
-    .object({
-      createdAt: z.string().datetime(),
-      updatedAt: z.string().datetime(),
-    })
-    .optional(),
+  skill: SkillValueSchema,
 });
 
 export type WelcomeSurveyData = z.infer<typeof WelcomeSurveyDataSchema>;

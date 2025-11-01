@@ -11,7 +11,7 @@ import { Cart } from "@/domain/cart/Cart";
 import { ShippingPolicy } from "@/domain/cart/policy/ShippingPolicy";
 import { Money } from "@/domain/cart/value-objects/Money";
 import { goldSilverCopperFormatter } from "@/domain/currency/GoldSilverCopperFormatter";
-import { WelcomeSurvey } from "@/domain/welcomeSurvey/WelcomeSurvey";
+import { Skill } from "@/domain/welcomeSurvey/value-objects/Skill";
 import { useImmutableInstance } from "@/lib/useImmutableInstance";
 import { ShoppingCartItem } from "@/ui/components/Cart/ShoppingCartItem";
 import { WelcomeModal } from "@/ui/components/WelcomeModal/WelcomeModal";
@@ -43,10 +43,10 @@ interface ShoppingCartProps {
 
 export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
   const [showCart, setShowCart] = useState(false);
-  const cart = useImmutableInstance<Cart>(new Cart());
-  const { survey } = WelcomeModal.useWelcomeModalSurvey();
+  const cart = useImmutableInstance(new Cart());
+  const { welcomeSurvey } = WelcomeModal.useWelcomeModalSurvey();
   const selectedProfile = ProductCardLogic.selectProfile(
-    survey?.skill ?? "beginner"
+    welcomeSurvey?.skill ?? "beginner"
   );
 
   return (
@@ -59,7 +59,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ welcomeModalHandle }) => {
           size="default"
           onClick={() => welcomeModalHandle.current.open()}
         >
-          {WelcomeSurvey.selectSkillLabel(survey?.skill ?? "beginner")}
+          {new Skill(welcomeSurvey?.skill ?? "beginner").label()}
         </Button>
       </div>
 

@@ -1,25 +1,23 @@
-import type { WelcomeSurveyData } from "@/domain/welcomeSurvey/WelcomeSurvey.data";
+import { WelcomeSurvey } from "@/domain/welcomeSurvey/WelcomeSurvey";
 import type { WelcomeStorageRepository } from "@/domain/welcomeSurvey/WelcomeSurveyStorage.repository";
-import { useEffect, useState } from "react";
+import { useImmutableInstance } from "@/lib/useImmutableInstance";
+import { useSyncExternalStore } from "react";
 import { LocalStorageWelcomeSurveyRepository } from "./WelcomeStorage/LocalStorageWelcomeSurvey.repository";
 
 export const welcomeStorage: WelcomeStorageRepository =
   new LocalStorageWelcomeSurveyRepository();
 
 export const useWelcomeModalSurvey = () => {
-  const [survey, setSurvey] = useState(welcomeStorage.getSurvey());
+  const welcomeSurvey = useSyncExternalStore(
+    welcomeStorage.subscribe,
+    welcomeStorage.getSurvey
+  );
+  const welcomeSurveyApi = useImmutableInstance(
+    new WelcomeSurvey(welcomeStorage)
+  );
 
-  useEffect(() => {
-    const unsubscribe = welcomeStorage.subscribe(() => {
-      setSurvey(welcomeStorage.getSurvey());
-    });
-
-    return unsubscribe;
-  }, []);
-
-  const saveSurvey = (data: WelcomeSurveyData) => {
-    welcomeStorage.saveSurvey(data);
+  return {
+    welcomeSurvey,
+    saveSurvey: welcomeSurveyApi.saveSurvey,
   };
-
-  return { survey, saveSurvey };
 };

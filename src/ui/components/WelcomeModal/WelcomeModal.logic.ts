@@ -7,8 +7,8 @@ export const useWelcomeModalHandle = () => {
     open: () => {},
     close: () => {},
   });
-  const { survey: welcomeModalSurvey } = WelcomeModal.useWelcomeModalSurvey();
-  const hasSubmittedData = !!welcomeModalSurvey;
+  const { welcomeSurvey } = WelcomeModal.useWelcomeModalSurvey();
+  const hasSubmittedData = !!welcomeSurvey;
 
   useEffect(() => {
     if (!hasSubmittedData) {

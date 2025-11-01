@@ -6,8 +6,8 @@ import type {
   WelcomeModalProps,
 } from "./WelcomeModal.types";
 
-import { WelcomeSurvey } from "@/domain/welcomeSurvey/WelcomeSurvey";
 import { WelcomeSurveyDataSchema } from "@/domain/welcomeSurvey/WelcomeSurvey.data";
+import { Skill } from "@/domain/welcomeSurvey/value-objects/Skill";
 import { Button } from "@/ui/primitives/button";
 import {
   Modal,
@@ -29,18 +29,15 @@ const WelcomeModalComponent = (
   ref: Ref<WelcomeModalHandle>
 ) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { survey, saveSurvey } = WelcomeModal.useWelcomeModalSurvey();
+  const { welcomeSurvey, saveSurvey } = WelcomeModal.useWelcomeModalSurvey();
+
   const form = useForm({
-    defaultValues: survey,
+    defaultValues: welcomeSurvey,
     onSubmit: async ({ value }) => {
       if (!value) return;
 
       const nextValue = {
         ...value,
-        _metadata: {
-          createdAt: value?._metadata?.createdAt || new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
       };
 
       onAction?.(nextValue);
@@ -107,13 +104,13 @@ const WelcomeModalComponent = (
                   >
                     <option value="">-- Select knowledge level --</option>
                     <option value="beginner">
-                      {WelcomeSurvey.selectSkillLabel("beginner")}
+                      {new Skill("beginner").label()}
                     </option>
                     <option value="intermediate">
-                      {WelcomeSurvey.selectSkillLabel("intermediate")}
+                      {new Skill("intermediate").label()}
                     </option>
                     <option value="expert">
-                      {WelcomeSurvey.selectSkillLabel("expert")}
+                      {new Skill("expert").label()}
                     </option>
                   </select>
                   {field.state.meta.isTouched &&

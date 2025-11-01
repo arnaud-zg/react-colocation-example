@@ -3,21 +3,25 @@
  */
 
 import type { WelcomeSurveyData } from "./WelcomeSurvey.data";
+import type { WelcomeStorageRepository } from "./WelcomeSurveyStorage.repository";
+import { Skill } from "./value-objects/Skill";
 
 export class WelcomeSurvey {
-  static selectSkillLabel(skill: WelcomeSurveyData["skill"]): string {
-    switch (skill) {
-      case "beginner":
-        return "✨ Beginner Explorer";
-      case "intermediate":
-        return "🧙‍♂️ Adept Seeker";
-      case "expert":
-        return "🌌 Master Mystic";
+  constructor(
+    private welcomeStorageRepository: WelcomeStorageRepository,
+    private skill?: Skill
+  ) {}
 
-      default:
-        throw new Error(
-          `selectSkillLabel: Unknown skill "${skill}". Expected "beginner", "intermediate", or "expert".`
-        );
-    }
+  skillLevel(): Skill | undefined {
+    return this.skill;
   }
+
+  saveSurvey = (data: WelcomeSurveyData): WelcomeSurvey => {
+    this.welcomeStorageRepository.saveSurvey(data);
+
+    return new WelcomeSurvey(
+      this.welcomeStorageRepository,
+      new Skill(data.skill)
+    );
+  };
 }
