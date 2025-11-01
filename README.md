@@ -1,10 +1,29 @@
 # React Object Calisthenics Demo
 
-This is a **demo repository** illustrating Object Calisthenics principles in React with Bun, supporting my article:
+This is a **demo repository** illustrating **Object Calisthenics principles** in React using Bun.
+
+It demonstrates how keeping objects small, simple, and focused makes your React code easier to understand and maintain.
 
 <!-- - **Article:** [Designing React Apps with Object Calisthenics](https://your-article-link.com) -->
 
 - **Live Demo:** [React Object Calisthenics Demo](https://arnaud-zg.github.io/react-object-calisthenics/)
+
+## What is it?
+
+This site is a hands-on demo showing how to apply **Object Calisthenics** in a front-end app. You'll see how:
+
+- Keeping objects small, simple, and focused makes React code more maintainable.
+- Reactive UI can be achieved with TanStack Router and Zustand.
+- Frontend architecture can be organized around **value objects** and single-responsibility principles.
+
+Take a few moments to explore the interactive experience, then dive into the code to see these principles in action.
+
+## Implementations
+
+- **Welcome Survey**
+  - Object Calisthenics applied with `WelcomeSurvey`
+  - Persistent state with **local storage**, **TanStack Router**, and **Zustand**
+- **Cart:** Object Calisthenics applied with `Cart`
 
 ## Folder Overview
 
@@ -63,7 +82,7 @@ pnpx shadcn@latest add button
 
 ## Routing
 
-Uses [TanStack Router](https://tanstack.com/router) with file-based routing in `src/routes`.
+Uses [TanStack Router](https://tanstack.com/router) with **file-based routing** in `src/routes`.
 
 ### Adding Routes
 
@@ -87,10 +106,9 @@ Supports [TanStack Store](https://tanstack.com/store/latest) for reactive state.
 
 ## Notes
 
-- Immutable Cart & Value Objects (Money, Quantity, Product)
+- Immutable **Cart** with **Value Objects** (`Money`, `Quantity`, `Product`, `ShippingPolicy`, `TaxPolicy`, `GoldSilverCopperFormatter`)
+- Immutable **Welcome Survey** with **Value Objects** (`Skill`)
 - Object Calisthenics applied: no getters/setters, wrap primitives, first-class collections, single-level methods
 - Reactive UI with Framer Motion for cart animations
 
-Demo files are optional and can be deleted.
-
-Learn more at [TanStack docs](https://tanstack.com).
+Learn more at [TanStack docs](https://tanstack.com)."
