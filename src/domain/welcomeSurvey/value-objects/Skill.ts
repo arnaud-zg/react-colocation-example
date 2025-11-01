@@ -16,6 +16,8 @@ export class Skill {
   }
 
   update(skillValue: SkillValue) {
+    SkillValueSchema.parse(skillValue);
+
     return new Skill(skillValue);
   }
 
