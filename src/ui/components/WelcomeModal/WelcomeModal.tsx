@@ -25,7 +25,7 @@ import type { WelcomeModalComponentType } from "./WelcomeModal.types";
 export type { WelcomeModalHandle } from "./WelcomeModal.types";
 
 const WelcomeModalComponent = (
-  { title, description, actionLabel = "Continue", onAction }: WelcomeModalProps,
+  { title, description, actionLabel = "Continue" }: WelcomeModalProps,
   ref: Ref<WelcomeModalHandle>
 ) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,15 +33,10 @@ const WelcomeModalComponent = (
 
   const form = useForm({
     defaultValues: welcomeSurvey,
-    onSubmit: async ({ value }) => {
-      if (!value) return;
+    onSubmit: async ({ value: survey }) => {
+      if (!survey) return;
 
-      const nextValue = {
-        ...value,
-      };
-
-      onAction?.(nextValue);
-      saveSurvey(nextValue);
+      saveSurvey(survey);
       setIsOpen(false);
     },
   });

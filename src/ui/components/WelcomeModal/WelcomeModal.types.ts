@@ -1,4 +1,3 @@
-import type { WelcomeSurveyData } from "@/domain/welcomeSurvey/WelcomeSurvey.data";
 import type {
   ForwardRefExoticComponent,
   RefAttributes,
@@ -18,7 +17,6 @@ export type WelcomeModalProps = {
   title: string;
   description: string;
   actionLabel?: string;
-  onAction?: (data: WelcomeSurveyData) => void;
 };
 
 export type WelcomeModalStatic = {

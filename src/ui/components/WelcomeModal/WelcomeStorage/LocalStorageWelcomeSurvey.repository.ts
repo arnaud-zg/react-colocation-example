@@ -1,51 +1,49 @@
-import {
-  type WelcomeSurveyData,
-  WelcomeSurveyDataSchema,
-} from "@/domain/welcomeSurvey/WelcomeSurvey.data";
 import type {
   Listener,
   WelcomeStorageRepository,
 } from "@/domain/welcomeSurvey/WelcomeSurveyStorage.repository";
+import {
+  WELCOME_SURVEY_KEY,
+  type WelcomeSurveyStoreState,
+  WelcomeSurveyStoreStateSchema,
+} from "@/domain/welcomeSurvey/WelcomeSurveyStore.config";
 
 export class LocalStorageWelcomeSurveyRepository
   implements WelcomeStorageRepository
 {
-  private static readonly STORAGE_KEY = "welcome_survey";
-
   private listeners = new Set<Listener>();
-  private cache: WelcomeSurveyData | null | undefined = undefined;
+  private cache: WelcomeSurveyStoreState = { survey: null };
 
-  getSurvey = (): WelcomeSurveyData | null => {
+  getSurvey = (): WelcomeSurveyStoreState["survey"] => {
     if (this.cache !== undefined) {
-      return this.cache;
+      return this.cache.survey;
     }
 
-    const rawData = localStorage.getItem(
-      LocalStorageWelcomeSurveyRepository.STORAGE_KEY
-    );
+    const rawData = localStorage.getItem(WELCOME_SURVEY_KEY);
+
     if (!rawData) {
-      this.cache = null;
+      this.cache = { survey: null };
       return null;
     }
 
     try {
-      const parsed = WelcomeSurveyDataSchema.safeParse(JSON.parse(rawData));
-      this.cache = parsed.success ? parsed.data : null;
+      const parsed = WelcomeSurveyStoreStateSchema.safeParse(
+        JSON.parse(rawData)
+      );
+      this.cache = parsed.success ? parsed.data : { survey: null };
     } catch {
-      this.cache = null;
+      this.cache = { survey: null };
     }
 
-    return this.cache;
+    return this.cache.survey;
   };
 
-  saveSurvey = (data: WelcomeSurveyData): void => {
+  saveSurvey = (survey: WelcomeSurveyStoreState["survey"]): void => {
     try {
-      localStorage.setItem(
-        LocalStorageWelcomeSurveyRepository.STORAGE_KEY,
-        JSON.stringify(data)
-      );
+      const nextStoreState: WelcomeSurveyStoreState = { survey };
 
-      this.cache = data;
+      localStorage.setItem(WELCOME_SURVEY_KEY, JSON.stringify(nextStoreState));
+      this.cache = nextStoreState;
 
       for (const listener of this.listeners) {
         listener();

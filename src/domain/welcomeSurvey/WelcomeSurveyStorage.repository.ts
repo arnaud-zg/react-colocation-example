@@ -1,8 +1,8 @@
-import type { WelcomeSurveyData } from "./WelcomeSurvey.data";
+import type { WelcomeSurveyStoreState } from "@/domain/welcomeSurvey/WelcomeSurveyStore.config";
 
 export interface WelcomeStorageRepository {
-  getSurvey(): WelcomeSurveyData | null;
-  saveSurvey(data: WelcomeSurveyData): void;
+  getSurvey(): WelcomeSurveyStoreState["survey"] | null;
+  saveSurvey(data: WelcomeSurveyStoreState["survey"]): void;
   subscribe(callback: VoidFunction): VoidFunction;
 }
 

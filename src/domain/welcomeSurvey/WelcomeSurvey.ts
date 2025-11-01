@@ -16,12 +16,12 @@ export class WelcomeSurvey {
     return this.skill;
   }
 
-  saveSurvey = (data: WelcomeSurveyData): WelcomeSurvey => {
-    this.welcomeStorageRepository.saveSurvey(data);
+  saveSurvey = (survey: WelcomeSurveyData): WelcomeSurvey => {
+    this.welcomeStorageRepository.saveSurvey(survey);
 
     return new WelcomeSurvey(
       this.welcomeStorageRepository,
-      new Skill(data.skill)
+      new Skill(survey.skill)
     );
   };
 }

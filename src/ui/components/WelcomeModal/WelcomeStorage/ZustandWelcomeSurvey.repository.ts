@@ -1,12 +1,15 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import type { WelcomeSurveyData } from "@/domain/welcomeSurvey/WelcomeSurvey.data";
 import type { WelcomeStorageRepository } from "@/domain/welcomeSurvey/WelcomeSurveyStorage.repository";
+import {
+  WELCOME_SURVEY_KEY,
+  type WelcomeSurveyStoreState,
+} from "@/domain/welcomeSurvey/WelcomeSurveyStore.config";
 
 interface WelcomeModalState {
-  survey: WelcomeSurveyData | null;
-  setSurvey: (data: WelcomeSurveyData) => void;
+  survey: WelcomeSurveyStoreState["survey"];
+  setSurvey: (data: WelcomeSurveyStoreState["survey"]) => void;
 }
 
 const useWelcomeStore = create<WelcomeModalState>()(
@@ -15,19 +18,19 @@ const useWelcomeStore = create<WelcomeModalState>()(
       survey: null,
       setSurvey: (data) => set({ survey: data }),
     }),
-    { name: "welcome_survey" }
+    { name: WELCOME_SURVEY_KEY }
   )
 );
 
 export class ZustandWelcomeSurveyRepository
   implements WelcomeStorageRepository
 {
-  getSurvey = (): WelcomeSurveyData | null => {
+  getSurvey = (): WelcomeSurveyStoreState["survey"] => {
     return useWelcomeStore.getState().survey;
   };
 
-  saveSurvey = (data: WelcomeSurveyData): void => {
-    useWelcomeStore.getState().setSurvey(data);
+  saveSurvey = (survey: WelcomeSurveyStoreState["survey"]): void => {
+    useWelcomeStore.getState().setSurvey(survey);
   };
 
   subscribe = (callback: () => void): (() => void) => {
